@@ -8,13 +8,13 @@
    project create a new dataset with name 'my_new_dataset'
 
 3. First part of  Part A
-   run the file a1_evaluation.py
-   command: python a1_evaluation.py
+   - run the file a1_evaluation.py
+   - command: python a1_evaluation.py
 
    it will fetch the result and upload the result in table a1_results
 
 4. Second part of Part A
-   run the file a2_evaluation.py
-   command: python a2_evaluation.py
+   - run the file a2_evaluation.py
+   - command: python a2_evaluation.py
 
    it will fetch the result and upload the result in table a2_results
