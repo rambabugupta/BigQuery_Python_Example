@@ -13,7 +13,8 @@ LIMIT 12;
 
 PART A2
 
-#standardSQL WITH tiers AS
+#standardSQL 
+WITH tiers AS
   (SELECT owner_user_id user_id,
           CASE
               WHEN pos BETWEEN 1 AND 3 THEN 1
