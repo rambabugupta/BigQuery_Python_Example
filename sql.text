@@ -1,0 +1,49 @@
+PART A1
+
+SELECT a.id
+FROM [bigquery-public-data:stackoverflow.users] AS a
+LEFT JOIN [bigquery-public-data:stackoverflow.stackoverflow_posts] AS b ON (a.id = b.owner_user_id)
+WHERE a.reputation > 400000
+  AND year(b.last_activity_date) = 2016
+  AND (REGEXP_MATCH(b.tags, r'(java|python)(\||$)'))
+GROUP BY a.id
+LIMIT 12;
+
+
+
+PART A2
+
+#standardSQL WITH tiers AS
+  (SELECT owner_user_id user_id,
+          CASE
+              WHEN pos BETWEEN 1 AND 3 THEN 1
+              WHEN pos BETWEEN 4 AND 10 THEN 2
+              ELSE 3
+          END tier,
+          SUM(favorite_count) favorite_count
+   FROM
+     (SELECT t.owner_user_id,
+             t.favorite_count,
+             ROW_NUMBER() OVER(PARTITION BY t.owner_user_id
+                               ORDER BY t.favorite_count DESC) pos
+      FROM
+        (SELECT owner_user_id,
+                post_type_id,
+                sum(favorite_count) favorite_count
+         FROM `bigquery-public-data.stackoverflow.stackoverflow_posts`
+         WHERE owner_user_id IN
+             (SELECT id
+              FROM `candidate-eval.my_new_dataset.a1_results`)
+         GROUP BY owner_user_id,
+                  post_type_id
+         ORDER BY favorite_count DESC) t)
+   GROUP BY user_id,
+            tier
+   ORDER BY user_id,
+            tier )
+SELECT user_id,
+       tier,
+       ROUND(favorite_count / SUM(favorite_count) OVER(PARTITION BY user_id), 3) SHARE
+FROM tiers
+ORDER BY user_id,
+         tier ASC
