@@ -19,4 +19,4 @@
 
    it will fetch the result and upload the result in table a2_results
    
-   Getting error while creating table in project ‘candidate-evaluation. So, I have created project candidate-eval.
+   Getting excess error while creating table in project ‘candidate-evaluation. So, I have created project candidate-eval.
